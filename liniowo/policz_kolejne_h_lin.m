@@ -1,5 +1,5 @@
 function [ h ] = policz_kolejne_h_lin(h, Fc, Fh, Fd, Tp)
-%Funkcja licz±ca wysoko¶æ poziomu zbiornika
+%Funkcja licz¹ca wysokoœæ poziomu zbiornika
 
 pom = h + 0.5*Tp * pochodna_h_lin(h, Fc, Fh, Fd);
 

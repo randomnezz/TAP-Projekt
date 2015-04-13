@@ -1,63 +1,62 @@
 %file:      Symulacja_uklad.m
-%authors:   Jakub GembiÄ¹â€º
+%authors:   Jakub Gembiœ
 %           Mateusz Baczewski
-%           PaweÄ¹â€š Kallas
+%           Pawe³ Kallas
 %%
 %////////////////////////////////////////////////////////////////////////////%
-%               PRZYGOTOWANIE STAÄ¹?YCH I ZMIENNYCH DO OBLICZEÄ¹?                 %
+%               PRZYGOTOWANIE STA£YCH I ZMIENNYCH DO OBLICZEÑ                 %
 %////////////////////////////////////////////////////////////////////////////%
 
 % Jednostki podstawowe w modelu - stopnie celcjusza, sekundy, cm
 clear;
 addpath('liniowo')
-% StaÄ¹â€še
+% Sta³e
 %-------------------------------------------------------------------------------------------------%
-C = 0.5;            %staÄ¹â€ša wiÃ„â€¦Ä¹Ä½Ã„â€¦ca objÃ„â„¢toÄ¹â€ºÃ„â€¡ i wysokoÄ¹â€ºÃ„â€¡          [cm]
-alfa = 20;          %staÄ¹â€ša wiÃ„â€¦Ä¹Ä½Ã„â€¦ca odpÄ¹â€šyw i wysokoÄ¹â€ºÃ„â€¡            [?(cm^5)/s]
-TAUc = 160;         %opÄ‚Å‚Ä¹ÅŸnienie dopÄ¹â€šywu zimnej wody             [s]
-TAUh = 80;          %opÄ‚Å‚Ä¹ÅŸnienie dopÄ¹â€šywu ciepÄ¹â€šej wody            [s]
+C = 0.5;            %sta³a wi¹¿¹ca objêtoœæ i wysokoœæ          [cm]
+alfa = 20;          %sta³a wi¹¿¹ca odp³yw i wysokoœæ            [?(cm^5)/s]
+TAUc = 160;         %opóŸnienie dop³ywu zimnej wody             [s]
+TAUh = 80;          %opóŸnienie dop³ywu ciep³ej wody            [s]
 
 %Punkt pracy
 %-------------------------------------------------------------------------------------------------%
-Tc0 = 25;            %temperatura zimnej wody                    [Ã‚Â°C]
-Th0 = 84;            %temperatura ciepÄ¹â€šej wody                   [Ã‚Â°C]
-Td0 = 42;            %temperatura wody dopÄ¹â€šywu zakÄ¹â€šÄ‚Å‚cajÃ„â€¦cego     [Ã‚Â°C]
+Tc0 = 25;            %temperatura zimnej wody                    [°C]
+Th0 = 84;            %temperatura ciep³ej wody                   [°C]
+Td0 = 42;            %temperatura wody dop³ywu zak³ócaj¹cego     [°C]
+Fc0 = 54;            %dop³yw zimnej wody                         [cm?/s]
+Fh0 = 23;            %dop³yw ciep³ej wody                        [cm?/s]
+Fd0 = 10;            %dop³yw wody dop³ywu zak³ócaj¹cego          [cm?/s]
 
-Fc0 = 54;            %dopÄ¹â€šyw zimnej wody                         [cm?/s]
-Fh0 = 23;            %dopÄ¹â€šyw ciepÄ¹â€šej wody                        [cm?/s]
-Fd0 = 10;            %dopÄ¹â€šyw wody dopÄ¹â€šywu zakÄ¹â€šÄ‚Å‚cajÃ„â€¦cego          [cm?/s]
-
-h = 18.92;          %wysokoÄ¹â€ºÃ„â€¡ wody w zbiorniku                  [cm]
-T = 42.55;          %temperatura wody w zbiorniku               [Ã‚Â°C]
+h = 18.92;          %wysokoœæ wody w zbiorniku                  [cm]
+T = 42.55;          %temperatura wody w zbiorniku               [°C]
 
 h_lin = 18.92;
 T_lin = 42.55;
 
-%StaÄ¹â€še symulacji
-%czas_symulacji musi byÃ„â€¡ podzielny przez krok
+%Sta³e symulacji
+%czas_symulacji musi byæ podzielny przez krok
 %-------------------------------------------------------------------------------------------------%
-krok = 0.1;             %okres prÄ‚Å‚bkowania                      [s]
+krok = 0.1;             %okres próbkowania                      [s]
 czas_symulacji = 400;   %czas symulacji                         [s]
 
 lIter = czas_symulacji/krok + 1;    %liczba iteracji
 
-%Sprawdzenie poprawnoÄ¹â€ºci zmiennych
-%czas symulacji i krok
+%Sta³e symulacji
+%czas_symulacji musi byæ podzielny przez krok
 %-------------------------------------------------------------------------------------------------%
-if(mod(lIter, 1) ~= 0) %jeÄ¹â€ºli czas_symulacji nie dzieli siÃ„â„¢ przez krok
+if(mod(lIter, 1) ~= 0) %jeœli czas_symulacji nie dzieli siê przez krok
 disp('Zmienna "czas_symulacji" musi byc podzielna przez zmiennÃ„â€¦ "krok".') %drukuje komunikat
-return                                                                %i koÄ¹â€žczy program
+return                                                                %i koñczy program
 end
 
 %Wektory zmiennych
 %-------------------------------------------------------------------------------------------------%
-wysokosc(lIter) = 0;      %alokacja wektora zawierajÃ„â€¦cego kolejne wartoÄ¹â€ºci wysokoÄ¹â€ºci wody [cm]
-temperatura(lIter) = 0;   %alokacja wektora zawierajÃ„â€¦cego kolejne wartoÄ¹â€ºci temperatury wody [Ã‚Â°C]
+wysokosc(lIter) = 0;      %alokacja wektora zawieraj¹cego kolejne wartoœci wysokoœci wody [cm]
+temperatura(lIter) = 0;   %alokacja wektora zawieraj¹cego kolejne wartoœci temperatury wody [°C]
 wysokosc_lin(lIter) = 0;
 temperatura_lin(lIter) = 0;
 Fh(lIter) = 0;
 Fc(lIter) = 0;
-%Utworzenie wektorÄ‚Å‚w wejÄ¹â€ºciowych
+%Utworzenie wektorów wejœciowych oraz zak³ócaj¹cych
 %-------------------------------------------------------------------------------------------------%
 Fc_in = Fc0 * ones(lIter, 1);
 Fh_in = Fh0 * ones(lIter, 1);
@@ -78,7 +77,7 @@ Fc_in( round((1/4)*lIter) : end) = Fc0 + 1;
 
 %%
 %%////////////////////////////////////////////////////////////////////////////%
-%                           GÄ¹?Ä‚â€œWNA PÃ„?TLA PROGRAMU                             %
+%                           G£ÓWNA PÊTLA PROGRAMU                              %
 %/////////////////////////////////////////////////////////////////////////////%
 
 for i = 1:lIter
@@ -94,7 +93,7 @@ for i = 1:lIter
         Fc(i) = Fc0;
     end
   
-    wysokosc(i) = h;                                             %wpisuje do tablicy wartoÄ¹â€ºci z poprzedniej iteracji
+    wysokosc(i) = h;                                             %wpisuje do tablicy wartoœci z poprzedniej iteracji
     temperatura(i) = T;                                          
     T = Policz_kolejne_T(Th(i), Tc(i), Td(i), T, Fh(i), Fc(i), Fd(i), alfa, h, C, krok); 
     h = Policz_kolejne_h(Fh(i), Fc(i), Fd(i), alfa, h, C, krok);
@@ -108,7 +107,7 @@ end;
 
 %%
 %/////////////////////////////////////////////////////////////////////////////%
-%                  PRZEDSTAWIENIE WYNIKÄ‚â€œW NA WYKRESACH                        %
+%                  PRZEDSTAWIENIE WYNIKÓW NA WYKRESACH                        %
 %/////////////////////////////////////////////////////////////////////////////%
 
 czas = 0:krok:czas_symulacji;       %wektor czasu [s]
@@ -116,40 +115,40 @@ subplot(2,2,1);
 plot(czas,wysokosc)
 grid on
 xlabel('czas [s]');
-ylabel('wysokosc [cm]');            %wysokoÄ¹â€ºÃ„â€¡ wody w zbiorniku [cm]
+ylabel('wysokosc [cm]');            %wysokoœæ wody w zbiorniku [cm]
 hold on
 
 subplot(2,2,3);
 plot(czas,temperatura)
 grid on
 xlabel('czas [s]');
-ylabel('temperatura [^oC]');        %temperatura wody w zbiorniku [Ã‚Â°C]
+ylabel('temperatura [^oC]');        %temperatura wody w zbiorniku [°C]
 hold on
 
 subplot(2,2,1);
 plot(czas,wysokosc_lin)
 legend('nieliniowy','liniowy','Location','west')
 grid on
-xlabel('czas [s]');                 %wysokosc - model zlinearyzowany [cm]
+xlabel('czas [s]');                 %wysokoœæ - model zlinearyzowany [cm]
 ylabel('wysokosc [cm]');            %na wykresie znajduja sie dwie funkcje
 
 subplot(2,2,3);
 plot(czas,temperatura_lin)
 legend('nieliniowy','liniowy','Location','west')
 grid on
-xlabel('czas [s]');                 %temperatura - model zlinearyzowany [Â°C]
+xlabel('czas [s]');                 %temperatura - model zlinearyzowany [°C]
 ylabel('temperatura [^oC]');        %na wykresie znajduja sie dwie funkcje
 
 subplot(2,2,2);
-plot(czas,wysokosc_lin-wysokosc)    %wykres bledu bezwzglednego (wysokosc) [cm]
+plot(czas,(wysokosc_lin-wysokosc)./wysokosc)    %wykres bledu bezwzglednego (wysokosc) [cm]
 grid on
 xlabel('czas [s]');
-ylabel('blad bezwzgledny (lin-nlin) [cm]');
+ylabel('blad wzgledny [%]');
 
 subplot(2,2,4);
-plot(czas,temperatura_lin-temperatura)%wykres bledu bezwzglednego (temperatura) [Â°C]
+plot(czas,(temperatura_lin-temperatura)./temperatura)%wykres bledu bezwzglednego (temperatura) [°C]
 grid on
 xlabel('czas [s]');
-ylabel('blad bezwzgledny (lin-nlin) [^oC]');
+ylabel('blad wzgledny [%]');
 
 rmpath('liniowo')
