@@ -52,11 +52,11 @@ dTdt_fun = symfun(dTdt_lin, [Fc, Fh, Fd, Tc, Th, Td, T, h]);
 A = double([dhdt_fun(0, 0, 0, 1) - dhdt_fun(0, 0, 0, 0), 0;
     dTdt_fun(0, 0, 0, 0, 0, 0, 0, 1) - dTdt_fun(0, 0, 0, 0, 0, 0, 0, 0),  dTdt_fun(0, 0, 0, 0, 0, 0, 1, 0) - dTdt_fun(0, 0, 0, 0, 0, 0, 0, 0)]);
 
-B = double([dhdt_fun(1, 0, 0, 0) - dhdt_fun(0, 0, 0, 0), dhdt_fun(0, 1, 0, 0) - dhdt_fun(0, 0, 0, 0), dhdt_fun(0, 0, 1, 0) - dhdt_fun(0, 0, 0, 0), 0, 0, 0;
+B = double([dhdt_fun(1, 0, 0, 0) - dhdt_fun(0, 0, 0, 0), dhdt_fun(0, 1, 0, 0) - dhdt_fun(0, 0, 0, 0), dhdt_fun(0, 0, 1, 0) - dhdt_fun(0, 0, 0, 0), 0;
     dTdt_fun(1,0,0,0,0,0,0,0) - dTdt_fun(0,0,0,0,0,0,0,0), dTdt_fun(0,1,0,0,0,0,0,0) - dTdt_fun(0,0,0,0,0,0,0,0), dTdt_fun(0,0,1,0,0,0,0,0) - dTdt_fun(0,0,0,0,0,0,0,0), ...
-    dTdt_fun(0,0,0,1,0,0,0,0) - dTdt_fun(0,0,0,0,0,0,0,0), dTdt_fun(0,0,0,0,1,0,0,0) - dTdt_fun(0,0,0,0,0,0,0,0), dTdt_fun(0,0,0,0,0,1,0,0) - dTdt_fun(0,0,0,0,0,0,0,0)]);
+    dTdt_fun(0,0,0,0,0,1,0,0) - dTdt_fun(0,0,0,0,0,0,0,0)]);
 
 C = [1, 0; 0, 1];
-D = [0,0,0,0,0,0;
-    0,0,0,0,0,0];
-sys = ss(A,B,C,D)
+D = [0,0,0,0;
+    0,0,0,0];
+sys = ss(A,B,C,D);
