@@ -39,7 +39,7 @@ T_lin = 42.55;
 %czas_symulacji musi byæ podzielny przez krok
 %-------------------------------------------------------------------------------------------------%
 krok = 0.1;             %okres próbkowania                      [s]
-czas_symulacji = 500;   %czas symulacji                         [s]
+czas_symulacji = 100;   %czas symulacji                         [s]
 
 lIter = czas_symulacji/krok + 1;    %liczba iteracji
 
@@ -71,12 +71,12 @@ Td = Td0 * ones(lIter, 1);
 
 % skok na wejsciu
 % Fc_in( 1 : end) = Fc0 + 2.5;
-% Fh_in( 1 : end) = Fh0 - 2.5;
-Fd( 1 : end) = Fd0 + 10;
+% Fh_in( 1 : end) = Fh0 + 2.5;
+% Fd( 1 : end) = Fd0 - 10;
 % 
 % Tc( round((1/4)*lIter) : end) = Tc0 + 1;
 % Th( round((1/4)*lIter) : end) = Th0 + 1;
-% Td( 1 : end) = Td0 + 1000;
+Td( 1 : end) = Td0 + 1000;
 
 %%
 %%////////////////////////////////////////////////////////////////////////////%
