@@ -26,8 +26,11 @@ Fc0 = 54;            %dop³yw zimnej wody                         [cm?/s]
 Fh0 = 23;            %dop³yw ciep³ej wody                        [cm?/s]
 Fd0 = 10;            %dop³yw wody dop³ywu zak³ócaj¹cego          [cm?/s]
 
-h = 18.92;          %wysokoœæ wody w zbiorniku                  [cm]
-T = 42.55;          %temperatura wody w zbiorniku               [°C]
+h0 = 18.92;
+T0 = 42.55;
+
+h = h0;          %wysokoœæ wody w zbiorniku                  [cm]
+T = T0;          %temperatura wody w zbiorniku               [°C]
 
 h_lin = 18.92;
 T_lin = 42.55;
@@ -36,7 +39,7 @@ T_lin = 42.55;
 %czas_symulacji musi byæ podzielny przez krok
 %-------------------------------------------------------------------------------------------------%
 krok = 0.1;             %okres próbkowania                      [s]
-czas_symulacji = 400;   %czas symulacji                         [s]
+czas_symulacji = 500;   %czas symulacji                         [s]
 
 lIter = czas_symulacji/krok + 1;    %liczba iteracji
 
@@ -44,7 +47,7 @@ lIter = czas_symulacji/krok + 1;    %liczba iteracji
 %czas_symulacji musi byæ podzielny przez krok
 %-------------------------------------------------------------------------------------------------%
 if(mod(lIter, 1) ~= 0) %jeœli czas_symulacji nie dzieli siê przez krok
-disp('Zmienna "czas_symulacji" musi byc podzielna przez zmiennÃ„â€¦ "krok".') %drukuje komunikat
+disp('Zmienna "czas_symulacji" musi byc podzielna przez zmienn¹ "krok".') %drukuje komunikat
 return                                                                %i koñczy program
 end
 
@@ -67,13 +70,13 @@ Th = Th0 * ones(lIter, 1);
 Td = Td0 * ones(lIter, 1);
 
 % skok na wejsciu
-Fc_in( round((1/4)*lIter) : end) = Fc0 + 1;
-% Fh_in( round((1/4)*lIter) : end) = Fh0 + 1;
-% Fd( round((1/4)*lIter) : end) = Fd0 + 1;
+% Fc_in( 1 : end) = Fc0 + 2.5;
+% Fh_in( 1 : end) = Fh0 - 2.5;
+Fd( 1 : end) = Fd0 + 10;
 % 
 % Tc( round((1/4)*lIter) : end) = Tc0 + 1;
 % Th( round((1/4)*lIter) : end) = Th0 + 1;
-% Td( round((1/4)*lIter) : end) = Td0 + 1;
+% Td( 1 : end) = Td0 + 1000;
 
 %%
 %%////////////////////////////////////////////////////////////////////////////%
@@ -115,7 +118,7 @@ subplot(2,2,1);
 plot(czas,wysokosc)
 grid on
 xlabel('czas [s]');
-ylabel('wysokosc [cm]');            %wysokoœæ wody w zbiorniku [cm]
+ylabel('wysokoœæ [cm]');            %wysokoœæ wody w zbiorniku [cm]
 hold on
 
 subplot(2,2,3);
@@ -126,29 +129,31 @@ ylabel('temperatura [^oC]');        %temperatura wody w zbiorniku [°C]
 hold on
 
 subplot(2,2,1);
-plot(czas,wysokosc_lin)
+plot(czas,wysokosc_lin, ':')
 legend('nieliniowy','liniowy','Location','west')
 grid on
 xlabel('czas [s]');                 %wysokoœæ - model zlinearyzowany [cm]
-ylabel('wysokosc [cm]');            %na wykresie znajduja sie dwie funkcje
+ylabel('wysokoœæ [cm]');            %na wykresie znajduja sie dwie funkcje
 
 subplot(2,2,3);
-plot(czas,temperatura_lin)
+plot(czas,temperatura_lin, ':')
 legend('nieliniowy','liniowy','Location','west')
 grid on
 xlabel('czas [s]');                 %temperatura - model zlinearyzowany [°C]
 ylabel('temperatura [^oC]');        %na wykresie znajduja sie dwie funkcje
 
 subplot(2,2,2);
-plot(czas,(wysokosc_lin-wysokosc)./wysokosc)    %wykres bledu bezwzglednego (wysokosc) [cm]
+plot(czas,100*((wysokosc_lin-h0)-(wysokosc-h0))./(wysokosc-h0))    %wykres bledu bezwzglednego (wysokosc) [cm]
 grid on
+hold on
 xlabel('czas [s]');
-ylabel('blad wzgledny [%]');
+ylabel('blad wzgledny wysokoœci [%]');
 
 subplot(2,2,4);
-plot(czas,(temperatura_lin-temperatura)./temperatura)%wykres bledu bezwzglednego (temperatura) [°C]
+plot(czas,100*((temperatura_lin-T0)-(temperatura-T0))./(temperatura-T0))%wykres bledu bezwzglednego (temperatura) [°C]
 grid on
+hold on
 xlabel('czas [s]');
-ylabel('blad wzgledny [%]');
+ylabel('blad wzgledny temperatury [%]');
 
 rmpath('liniowo')
