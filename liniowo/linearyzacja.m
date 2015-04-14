@@ -46,7 +46,7 @@ dTdt_fun = symfun(dTdt_lin, [Fc, Fh, Fd, Tc, Th, Td, T, h]);
 
 %% model stanowy
 % x = [h; T];
-% u = [Fc; Fh; Fd; Tc; Th; Td]
+% u = [Fc; Fh; Fd; Td]
 
 
 A = double([dhdt_fun(0, 0, 0, 1) - dhdt_fun(0, 0, 0, 0), 0;
@@ -60,3 +60,41 @@ C = [1, 0; 0, 1];
 D = [0,0,0,0;
     0,0,0,0];
 sys = ss(A,B,C,D);
+
+%% Zdyskretyzowane modele liniowe w postaci równañ stanu
+
+metoda='zoh'; 
+%step(systf(y,u)); Odpowiednie kombinacje sygna³ów wyj¶ciowych do
+%wej¶ciowych, 8 mo¿liwych transformat 
+%sys = systf(2,4);
+Tp = 1;
+sysd = c2d(sys,Tp,metoda);
+step(sys); hold on; step(sysd)
+%{
+pause;
+Tp=Tp/2
+sysd1=c2d(sys,Tp,metoda); step(sysd1);
+
+pause;
+Tp=Tp/2
+sysd2=c2d(sys,Tp,metoda); step(sysd2);
+
+pause;
+Tp=Tp/2.5
+sysd3=c2d(sys,Tp,metoda); step(sysd3);
+
+pause;
+Tp=Tp/2
+sysd4=c2d(sys,Tp,metoda); step(sysd4);
+
+pause;
+Tp=Tp/10
+sysd5=c2d(sys,Tp,metoda); step(sysd5);
+%}
+
+
+
+  
+
+
+
